@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<!-- lang and dir will be set dynamically -->
+<html>
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-MRPJK529');</script>
+    <!-- End Google Tag Manager -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عارض قوائم العقارات | Property Viewer</title> <!-- Title can be updated dynamically too if needed -->
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+      tailwind.config = {
+        darkMode: 'class', // Enable class-based dark mode
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Almarai', 'sans-serif'],
+            },
+            colors: {
+              primary: '#1D4ED8', // Blue-700
+              secondary: '#10B981', // Emerald-500
+              accent: '#F59E0B', // Amber-500
+              light: {
+                bg: '#F9FAFB', // Gray-50
+                card: '#FFFFFF',
+                text: '#111827', // Gray-900
+                textSecondary: '#6B7280', // Gray-500
+                border: '#E5E7EB', // Gray-200
+              },
+              dark: {
+                bg: '#111827', // Gray-900
+                card: '#1F2937', // Gray-800
+                text: '#F9FAFB', // Gray-50
+                textSecondary: '#9CA3AF', // Gray-400
+                border: '#374151', // Gray-700
+              },
+            },
+            animation: {
+              'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'fade-in': 'fadeIn 0.5s ease-in-out',
+              'slide-in-right': 'slideInRight 0.3s ease-out',
+              'slide-out-right': 'slideOutRight 0.3s ease-out',
+            },
+            keyframes: {
+              fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+              slideInRight: { '0%': { transform: 'translateX(100%)' }, '100%': { transform: 'translateX(0)' } },
+              slideOutRight: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(100%)' } },
+            },
+          },
+        },
+        plugins: [
+          // We can't easily add @tailwindcss/forms via CDN config,
+          // so default browser styles will apply to forms unless overridden manually.
+        ],
+      }
+    </script>
+
+    <!-- Custom Styles -->
+    <style>
+        /* Base styles matching context colors */
+        body {
+            background-color: #F9FAFB; /* light.bg */
+            color: #111827; /* light.text */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .dark body {
+            background-color: #111827; /* dark.bg */
+            color: #F9FAFB; /* dark.text */
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background-color: rgba(156, 163, 175, 0.5); border-radius: 20px; border: 3px solid transparent; background-clip: content-box; }
+        ::-webkit-scrollbar-thumb:hover { background-color: rgba(107, 114, 128, 0.7); }
+        /* Scrollbar Hide Utility */
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        /* Card Hover Effect */
+        .card-hover-effect { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card-hover-effect:hover { transform: translateY(-5px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        /* Modal Backdrop */
+        .modal-backdrop { backdrop-filter: blur(5px); }
+        /* Gradient Background */
+        .gradient-bg { background: linear-gradient(135deg, #1D4ED8 0%, #10B981 100%); }
+        /* Basic Form Styling (since @tailwindcss/forms isn't easily available) */
+        select, input[type="text"], input[type="number"] {
+            appearance: none;
+            background-color: #fff; /* Default light */
+            border-color: #E5E7EB; /* Default light */
+            border-width: 1px;
+            border-radius: 0.75rem; /* Corresponds to rounded-xl */
+            padding: 0.75rem; /* Corresponds to p-3 */
+            font-size: 0.875rem; /* text-sm */
+            line-height: 1.25rem;
+            width: 100%;
+        }
+        select { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem; }
+        [dir='rtl'] select { background-position: left 0.5rem center; padding-left: 2.5rem; padding-right: 0.75rem; }
+
+        .dark select, .dark input[type="text"], .dark input[type="number"] {
+            background-color: #1F2937; /* dark.card */
+            border-color: #374151; /* dark.border */
+            color: #F9FAFB; /* dark.text */
+        }
+        .dark select { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239CA3AF' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); }
+
+        /* Checkbox basic style */
+         input[type="checkbox"] {
+             border-radius: 0.25rem;
+             border-color: #9CA3AF; /* Gray-400 */
+             color: #1D4ED8; /* primary */
+         }
+         input[type="checkbox"]:focus {
+             --tw-ring-color: #1D4ED8;
+             border-color: #1D4ED8;
+             box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1D4ED8;
+         }
+        .dark input[type="checkbox"] {
+            border-color: #6B7280; /* Gray-500 */
+            background-color: #374151; /* dark.border */
+        }
+
+    </style>
+
+    <!-- React & Babel CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MRPJK529"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <!-- React Root Element -->
+    <div id="root"></div>
+
+    <!-- React Application Code -->
+    <script type="text/babel"> // IMPORTANT: type="text/babel"
+
+        const { useState, useEffect, useMemo, useRef, useCallback, createContext, useContext } = React;
+
+        // --- Contexts ---
+        const ThemeContext = createContext();
+        const LanguageContext = createContext();
+
+        // --- Helper Functions / Utilities ---
+        const Utils = {
+            // Simple currency formatter
+            formatCurrency: (amount, locale = 'ar-EG', currency = 'EGP') => {
+                try {
+                    return new Intl.NumberFormat(locale, {
+                        style: 'currency',
+                        currency: currency,
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                    }).format(amount);
+                } catch (e) {
+                    console.warn("Currency formatting failed:", e);
+                    return `${amount.toLocaleString()} ${currency}`; // Fallback
+                }
+            },
+            // Simple translation store
+            translations: {
+                en: {
+                    propertyViewer: 'Property Viewer',
+                    properties: 'Properties',
+                    home: 'Home',
+                    features: 'Features',
+                    about: 'About',
+                    contact: 'Contact',
+                    savedProperties: 'Saved Properties',
+                    compareProperties: 'Compare Properties',
+                    toggleLanguage: 'AR',
+                    lightMode: 'Light',
+                    darkMode: 'Dark',
+                    searchPlaceholder: 'Search by compound, city, or developer...',
+                    filterProperties: 'Filter Properties',
+                    advancedFilters: 'Advanced Filters',
+                    showLess: 'Show Less',
+                    priceRange: 'Price Range',
+                    allPrices: 'All Prices',
+                    underXMillion: 'Under {value}M',
+                    xToYMillion: '{min}M - {max}M',
+                    overXMillion: 'Over {value}M',
+                    bedrooms: 'Bedrooms',
+                    all: 'All',
+                    xPlusRooms: '{count}+ Rooms',
+                    propertyType: 'Property Type',
+                    city: 'City',
+                    developer: 'Developer',
+                    finishing: 'Finishing',
+                    status: 'Status',
+                    deliveryYears: 'Delivery (Years)',
+                    xPlusYears: '{count}+ Years',
+                    areaMin: 'Area (Min)',
+                    areaMax: 'Area (Max)',
+                    minAreaPlaceholder: 'Min area (sqm)',
+                    maxAreaPlaceholder: 'Max area (sqm)',
+                    reset: 'Reset',
+                    viewDetails: 'View Details',
+                    egp: 'EGP',
+                    sqm: 'sqm',
+                    noDescription: 'No description available.',
+                    location: 'Location',
+                    photos: 'Photos',
+                    projectDetails: 'Project Details',
+                    bedroomsShort: 'Beds',
+                    areaShort: 'Area',
+                    priceShort: 'Price',
+                    deliveryShort: 'Delivery',
+                    overview: 'Overview',
+                    description: 'Description',
+                    paymentPlan: 'Payment Plan',
+                    discountPrice: 'Discount Price',
+                    year: 'year',
+                    years: 'years',
+                    photo: 'Photo',
+                    layout: 'Layout',
+                    layouts: 'Layouts',
+                    additionalLinks: 'Additional Links',
+                    brochures: 'Brochures:',
+                    brochureX: 'Brochure {index}',
+                    masterPlan: 'Master Plan:',
+                    masterPlanX: 'Master Plan {index}',
+                    close: 'Close',
+                    noSavedProperties: 'No saved properties yet.',
+                    removeFromFavorites: 'Remove from Favorites',
+                    itemsPerPage: 'Items per page:',
+                    totalItems: 'Total: {count}',
+                    previous: 'Previous',
+                    next: 'Next',
+                    pageOf: 'Page {current} of {total}',
+                    sortBy: 'Sort by:',
+                    name: 'Name',
+                    date: 'Date', // Keep if needed
+                    sortAsc: 'Asc',
+                    sortDesc: 'Desc',
+                    noResults: 'No properties match your criteria.',
+                    tryAdjustingFilters: 'Try adjusting your filters or search term.',
+                    footerText: '© {year} Property Viewer. All rights reserved.',
+                    allRightsReserved: 'All rights reserved',
+                    addedToFavorites: 'Added to favorites',
+                    removedFromFavorites: 'Removed from favorites',
+                    addedToCompare: 'Added to comparison',
+                    removedFromCompare: 'Removed from comparison',
+                    compareLimit: 'Cannot compare more than 3 properties',
+                    clearedCompareList: 'Comparison list cleared',
+                    compareTitle: 'Compare Properties ({count})',
+                    remove: 'Remove',
+                    clearAll: 'Clear All',
+                    feature: 'Feature',
+                    compareError: 'Please select 2 or 3 properties to compare.',
+                    errorLoadingTitle: 'Error Loading Data',
+                    errorLoadingMessage: 'There was a problem fetching the property data. Please check the console or try again.',
+                    retry: 'Retry',
+                    priceOnRequest: 'Price on Request',
+                    'Typical Apartment': 'Typical Apartment',
+                    'Ground Duplex': 'Ground Duplex',
+                    'Penthouse': 'Penthouse',
+                    'Villa': 'Villa',
+                    'Twin House': 'Twin House',
+                    'New Cairo': 'New Cairo',
+                    'New Capital': 'New Capital',
+                    '6th of October': '6th of October',
+                    'Sheikh Zayed': 'Sheikh Zayed',
+                    'North Coast': 'North Coast',
+                    'Finished': 'Finished',
+                    'Semi-Finished': 'Semi-Finished',
+                    'Core & Shell': 'Core & Shell',
+                    'Ready to Move': 'Ready to Move',
+                    'Under Construction': 'Under Construction',
+                },
+                ar: {
+                    propertyViewer: 'عارض العقارات',
+                    properties: 'العقارات',
+                    home: 'الرئيسية',
+                    features: 'المميزات',
+                    about: 'حول',
+                    contact: 'اتصل بنا',
+                    savedProperties: 'العقارات المحفوظة',
+                    compareProperties: 'مقارنة العقارات',
+                    toggleLanguage: 'EN',
+                    lightMode: 'فاتح',
+                    darkMode: 'داكن',
+                    searchPlaceholder: 'ابحث باسم الكمبوند، المدينة أو المطور...',
+                    filterProperties: 'فلترة العقارات',
+                    advancedFilters: 'فلترة متقدمة',
+                    showLess: 'عرض أقل',
+                    priceRange: 'نطاق السعر',
+                    allPrices: 'كل الأسعار',
+                    underXMillion: 'أقل من {value} مليون',
+                    xToYMillion: '{min} مليون - {max} مليون',
+                    overXMillion: 'أكثر من {value} مليون',
+                    bedrooms: 'عدد الغرف',
+                    all: 'الكل',
+                    xPlusRooms: '{count} غرف فأكثر',
+                    propertyType: 'نوع العقار',
+                    city: 'المدينة',
+                    developer: 'المطور',
+                    finishing: 'التشطيب',
+                    status: 'الحالة',
+                    deliveryYears: 'التسليم (سنوات)',
+                    xPlusYears: '{count} سنوات فأكثر',
+                    areaMin: 'المساحة (من)',
+                    areaMax: 'المساحة (إلى)',
+                    minAreaPlaceholder: 'المساحة الأدنى (م²)',
+                    maxAreaPlaceholder: 'المساحة الأقصى (م²)',
+                    reset: 'إعادة ضبط',
+                    viewDetails: 'عرض التفاصيل',
+                    egp: 'جنيه',
+                    sqm: 'م²',
+                    noDescription: 'لا يوجد وصف متاح.',
+                    location: 'الموقع',
+                    photos: 'الصور',
+                    projectDetails: 'تفاصيل المشروع',
+                    bedroomsShort: 'غرف',
+                    areaShort: 'مساحة',
+                    priceShort: 'سعر',
+                    deliveryShort: 'تسليم',
+                    overview: 'نظرة عامة',
+                    description: 'الوصف',
+                    paymentPlan: 'خطة الدفع',
+                    discountPrice: 'سعر الخصم',
+                    year: 'سنة',
+                    years: 'سنوات',
+                    photo: 'صورة',
+                    layout: 'مخطط',
+                    layouts: 'المخططات',
+                    additionalLinks: 'روابط إضافية',
+                    brochures: 'بروشورات:',
+                    brochureX: 'بروشور {index}',
+                    masterPlan: 'المخطط الرئيسي:',
+                    masterPlanX: 'المخطط الرئيسي {index}',
+                    close: 'إغلاق',
+                    noSavedProperties: 'لا توجد عقارات محفوظة بعد.',
+                    removeFromFavorites: 'إزالة من المفضلة',
+                    itemsPerPage: 'عنصر لكل صفحة:',
+                    totalItems: 'الإجمالي: {count}',
+                    previous: 'السابق',
+                    next: 'التالي',
+                    pageOf: 'صفحة {current} من {total}',
+                    sortBy: 'ترتيب حسب:',
+                    name: 'الاسم',
+                    date: 'التاريخ', // Keep if needed
+                    sortAsc: 'تصاعدي',
+                    sortDesc: 'تنازلي',
+                    noResults: 'لا توجد عقارات تطابق معايير بحثك.',
+                    tryAdjustingFilters: 'حاول تعديل الفلاتر أو كلمة البحث.',
+                    footerText: '© {year} عارض العقارات. جميع الحقوق محفوظة.',
+                    allRightsReserved: 'جميع الحقوق محفوظة',
+                    addedToFavorites: 'تمت الإضافة إلى المفضلة',
+                    removedFromFavorites: 'تمت الإزالة من المفضلة',
+                    addedToCompare: 'تمت الإضافة إلى المقارنة',
+                    removedFromCompare: 'تمت الإزالة من المقارنة',
+                    compareLimit: 'لا يمكن مقارنة أكثر من 3 عقارات',
+                    clearedCompareList: 'تم مسح قائمة المقارنة',
+                    compareTitle: 'مقارنة العقارات ({count})',
+                    remove: 'إزالة',
+                    clearAll: 'مسح الكل',
+                    feature: 'الميزة',
+                    compareError: 'الرجاء اختيار عقارين أو ثلاثة للمقارنة.',
+                    errorLoadingTitle: 'خطأ في تحميل البيانات',
+                    errorLoadingMessage: 'حدثت مشكلة أثناء جلب بيانات العقارات. يرجى التحقق من وحدة التحكم أو المحاولة مرة أخرى.',
+                    retry: 'إعادة المحاولة',
+                    priceOnRequest: 'السعر عند الطلب',
+                    'Typical Apartment': 'شقة نمطية',
+                    'Ground Duplex': 'دوبلكس أرضي',
+                    'Penthouse': 'بنتهاوس',
+                    'Villa': 'فيلا',
+                    'Twin House': 'توين هاوس',
+                    'New Cairo': 'القاهرة الجديدة',
+                    'New Capital': 'العاصمة الإدارية',
+                    '6th of October': '6 أكتوبر',
+                    'Sheikh Zayed': 'الشيخ زايد',
+                    'North Coast': 'الساحل الشمالي',
+                    'Finished': 'تشطيب كامل',
+                    'Semi-Finished': 'نصف تشطيب',
+                    'Core & Shell': 'هيكل خرساني',
+                    'Ready to Move': 'جاهز للسكن',
+                    'Under Construction': 'تحت الإنشاء',
+                }
+            },
+            // Simple translation function
+            translate: (key, lang, options = {}) => {
+                let translation = Utils.translations[lang]?.[key] || key;
+                // Basic interpolation
+                Object.keys(options).forEach(optKey => {
+                    const regex = new RegExp(`{${optKey}}`, 'g');
+                    translation = translation.replace(regex, options[optKey]);
+                });
+                return translation;
+            },
+            // Helper to get unique options from data
+             getUniqueOptions: (data, key, subKey = null) => {
+                if (!data || data.length === 0) return [];
+                const values = new Set();
+                data.forEach(item => {
+                    const property = item.PropertyListings?.[0];
+                    if (property) {
+                        const value = subKey ? property[subKey] : item[key];
+                        if (value !== null && value !== undefined && value !== '') {
+                            values.add(value);
+                        }
+                    }
+                });
+                return Array.from(values).sort((a, b) => String(a).localeCompare(String(b))); // Sort alphabetically/numerically as strings
+            },
+            // Helper to safely parse URL params
+             safeJsonParse: (str, fallback) => {
+                try {
+                    // Basic check to avoid parsing simple strings like "All" or numbers as JSON
+                    if (!str || !str.startsWith('[') && !str.startsWith('{')) {
+                       return fallback;
+                    }
+                    return JSON.parse(str);
+                } catch (e) {
+                    return fallback;
+                }
+            },
+        };
+
+        // --- Custom Hooks (defined as functions) ---
+        function useLocalStorage(key, initialValue) {
+            const [storedValue, setStoredValue] = useState(() => {
+                try {
+                    const item = window.localStorage.getItem(key);
+                    return item ? JSON.parse(item) : initialValue;
+                } catch (error) {
+                    console.error(`Error reading localStorage key “${key}”:`, error);
+                    return initialValue;
+                }
+            });
+
+            useEffect(() => {
+                const handleStorageChange = (e) => {
+                    if (e.key === key && e.storageArea === window.localStorage && e.newValue !== null) {
+                        try {
+                            setStoredValue(JSON.parse(e.newValue));
+                        } catch (error) {
+                            console.error(`Error parsing stored value for key “${key}”:`, error);
+                        }
+                    }
+                };
+                window.addEventListener('storage', handleStorageChange);
+                return () => window.removeEventListener('storage', handleStorageChange);
+            }, [key]);
+
+            const setValue = useCallback((value) => {
+                try {
+                    const valueToStore = value instanceof Function ? value(storedValue) : value;
+                    setStoredValue(valueToStore);
+                    window.localStorage.setItem(key, JSON.stringify(valueToStore));
+                } catch (error) {
+                    console.error(`Error setting localStorage key “${key}”:`, error);
+                }
+            }, [key, storedValue]); // Include storedValue in deps for the function version
+
+            return [storedValue, setValue];
+        }
+
+        function useFetchData(url) {
+            const [data, setData] = useState([]);
+            const [isLoading, setIsLoading] = useState(true);
+            const [error, setError] = useState(null);
+
+            useEffect(() => {
+                const fetchData = async () => {
+                    setIsLoading(true);
+                    setError(null);
+                    try {
+                        const response = await fetch(url);
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        const jsonData = await response.json();
+                        setData(Array.isArray(jsonData) ? jsonData : []); // Ensure data is always an array
+                    } catch (e) {
+                        console.error("Failed to fetch data:", e);
+                        setError(e.message || 'Failed to load data');
+                        setData([]); // Reset data on error
+                    } finally {
+                        setIsLoading(false);
+                    }
+                };
+                fetchData();
+            }, [url]);
+
+            return { data, isLoading, error };
+        }
+
+        function useDebounce(value, delay) {
+            const [debouncedValue, setDebouncedValue] = useState(value);
+            useEffect(() => {
+                const handler = setTimeout(() => { setDebouncedValue(value); }, delay);
+                return () => { clearTimeout(handler); };
+            }, [value, delay]);
+            return debouncedValue;
+        }
+
+        function useFilterParams(initialFilters) {
+            const [filters, setFilters] = useState(() => {
+                const params = new URLSearchParams(window.location.search);
+                const urlFilters = {};
+                let hasUrlParams = false;
+                for (const key in initialFilters) {
+                    const paramValue = params.get(key);
+                    if (paramValue !== null) {
+                        hasUrlParams = true;
+                        // Safely parse arrays, handle numbers/booleans, otherwise keep string
+                        if (paramValue.startsWith('[') && paramValue.endsWith(']')) {
+                            urlFilters[key] = Utils.safeJsonParse(paramValue, initialFilters[key]);
+                        } else if (!isNaN(paramValue) && paramValue.trim() !== '') {
+                            urlFilters[key] = Number(paramValue);
+                        } else if (paramValue === 'true') {
+                            urlFilters[key] = true;
+                        } else if (paramValue === 'false') {
+                            urlFilters[key] = false;
+                        } else {
+                             // Handle 'Infinity' string for max values
+                            urlFilters[key] = paramValue === 'Infinity' ? Infinity : paramValue;
+                        }
+                    }
+                }
+                 // Merge URL params over initial defaults
+                 return hasUrlParams ? { ...initialFilters, ...urlFilters } : initialFilters;
+            });
+
+            // Update URL when filters change
+             useEffect(() => {
+                const params = new URLSearchParams();
+                Object.entries(filters).forEach(([key, value]) => {
+                    const initialValue = initialFilters[key];
+                    // Only add param if value is different from initial/default
+                    if (JSON.stringify(value) !== JSON.stringify(initialValue)) {
+                        if (Array.isArray(value)) {
+                            if (value.length > 0) { // Don't add empty arrays
+                                params.set(key, JSON.stringify(value));
+                            }
+                        } else if (value === Infinity) {
+                             params.set(key, 'Infinity'); // Store Infinity as string
+                         } else if (value !== null && value !== undefined && String(value).trim() !== '') {
+                            params.set(key, String(value));
+                        }
+                    }
+                });
+
+                const newUrl = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
+                 // Use replaceState to avoid adding to browser history for every filter change
+                window.history.replaceState({ path: newUrl }, '', newUrl);
+            }, [filters, initialFilters]);
+
+            const updateFiltersCallback = useCallback((newFilters) => {
+                setFilters(prevFilters => ({ ...prevFilters, ...newFilters }));
+            }, []);
+
+            const resetFiltersCallback = useCallback(() => {
+                setFilters(initialFilters);
+                 // Also clear URL params explicitly on reset
+                 window.history.replaceState({ path: window.location.pathname }, '', window.location.pathname);
+            }, [initialFilters]);
+
+             return [filters, updateFiltersCallback, resetFiltersCallback];
+        }
+
+
+        // --- Context Providers ---
+        const ThemeProvider = ({ children }) => {
+            const [isDarkMode, setIsDarkMode] = useState(() => {
+                const storedPref = localStorage.getItem('darkMode');
+                if (storedPref !== null) return JSON.parse(storedPref);
+                return window.matchMedia('(prefers-color-scheme: dark)').matches;
+            });
+
+            useEffect(() => {
+                const root = window.document.documentElement;
+                if (isDarkMode) root.classList.add('dark');
+                else root.classList.remove('dark');
+                localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
+            }, [isDarkMode]);
+
+            const toggleDarkMode = useCallback(() => setIsDarkMode(prev => !prev), []);
+
+            return (
+                <ThemeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
+                    {children}
+                </ThemeContext.Provider>
+            );
+        };
+
+        const LanguageProvider = ({ children }) => {
+            const [isArabic, setIsArabic] = useState(() => {
+                const storedLang = localStorage.getItem('language');
+                return storedLang ? storedLang === 'ar' : true; // Default Arabic
+            });
+
+            useEffect(() => {
+                const lang = isArabic ? 'ar' : 'en';
+                document.documentElement.setAttribute('lang', lang);
+                document.documentElement.setAttribute('dir', isArabic ? 'rtl' : 'ltr');
+                localStorage.setItem('language', lang);
+            }, [isArabic]);
+
+            const toggleLanguage = useCallback(() => setIsArabic(prev => !prev), []);
+
+            const t = useCallback((key, options = {}) => {
+                return Utils.translate(key, isArabic ? 'ar' : 'en', options);
+            }, [isArabic]);
+
+            return (
+                <LanguageContext.Provider value={{ isArabic, toggleLanguage, t }}>
+                    {children}
+                </LanguageContext.Provider>
+            );
+        };
+
+        // --- Hook Consumers (convenience) ---
+        const useTheme = () => useContext(ThemeContext);
+        const useLanguage = () => useContext(LanguageContext);
+
+        // --- SVG Icons (Inline JSX) ---
+        const Icon = ({ path, className = "w-6 h-6" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+                <path strokeLinecap="round" strokeLinejoin="round" d={path} />
+            </svg>
+        );
+        const IconSolid = ({ path, className = "w-6 h-6" }) => (
+             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+                <path fillRule="evenodd" d={path} clipRule="evenodd" />
+            </svg>
+        );
+        const Icons = {
+            BuildingOffice: () => <Icon path="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M8.25 21h7.5M12 6.75a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V7.5a.75.75 0 01.75-.75zM12 12.75a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0v-3.75a.75.75 0 01.75-.75z" />,
+            Sun: () => <Icon path="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />,
+            Moon: () => <Icon path="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />,
+            HeartOutline: () => <Icon path="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />,
+            HeartSolid: () => <IconSolid path="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />,
+            ArrowsRightLeft: () => <Icon path="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h18m-7.5-14L21 7.5m0 0L16.5 12M21 7.5H3" />,
+            ArrowsRightLeftSolid: () => <IconSolid path="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h18m-7.5-14L21 7.5m0 0L16.5 12M21 7.5H3" />, // Using outline for solid here, adjust if needed
+            Language: () => <Icon path="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 01-3.827-5.802" />,
+            Bars3: () => <Icon path="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />,
+            XMark: () => <Icon path="M6 18L18 6M6 6l12 12" />,
+            MagnifyingGlass: () => <Icon path="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" className="w-5 h-5" />,
+            Funnel: () => <Icon path="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.572a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" className="w-5 h-5" />,
+            ChevronDown: () => <Icon path="M19.5 8.25l-7.5 7.5-7.5-7.5" className="w-4 h-4" />,
+            ChevronUp: () => <Icon path="M4.5 15.75l7.5-7.5 7.5 7.5" className="w-4 h-4" />,
+            ChevronLeft: () => <Icon path="M15.75 19.5L8.25 12l7.5-7.5" className="w-5 h-5" />,
+            ChevronRight: () => <Icon path="M8.25 4.5l7.5 7.5-7.5 7.5" className="w-5 h-5" />,
+            MapPin: () => <Icon path="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" className="w-5 h-5" />,
+            Photo: () => <Icon path="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" className="w-5 h-5" />,
+            BuildingLibrary: () => <Icon path="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" className="w-5 h-5" />,
+            Link: () => <Icon path="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" className="w-5 h-5" />,
+            ListBullet: () => <Icon path="M8.25 6.75h12M8.25 12h12M8.25 17.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" className="w-5 h-5" />,
+            Trash: () => <Icon path="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" className="w-4 h-4" />,
+            SortAsc: () => <IconSolid path="M10 3a.75.75 0 01.75.75v10.5a.75.75 0 01-1.5 0V3.75A.75.75 0 0110 3zM5.22 5.22a.75.75 0 011.06 0l3 3a.75.75 0 01-1.06 1.06l-1.72-1.72V13.5a.75.75 0 01-1.5 0V7.56L3.16 9.28a.75.75 0 01-1.06-1.06l3-3z" className="w-4 h-4" />,
+            SortDesc: () => <IconSolid path="M10 17a.75.75 0 01-.75-.75V5.75a.75.75 0 011.5 0v10.5A.75.75 0 0110 17zM14.78 14.78a.75.75 0 01-1.06 0l-3-3a.75.75 0 011.06-1.06l1.72 1.72V6.5a.75.75 0 011.5 0v5.94l1.84-1.84a.75.75 0 111.06 1.06l-3 3z" className="w-4 h-4" />,
+            NoResults: () => <Icon path="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM13.5 10.5h-6" className="w-16 h-16 mx-auto mb-4 text-gray-400" strokeWidth={1}/>,
+            ErrorIcon: () => <Icon path="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" className="w-12 h-12 mb-4" />,
+        }
+
+        // --- Components ---
+
+        const Spinner = ({ size = 'medium', color = 'border-primary' }) => {
+            const sizeClasses = {
+                small: 'h-4 w-4 border-2',
+                medium: 'h-12 w-12 border-4',
+                large: 'h-24 w-24 border-4',
+            };
+            const sizeClass = sizeClasses[size] || sizeClasses.medium;
+            return (
+                <div className="flex justify-center items-center" aria-label="Loading...">
+                    <div className={`${sizeClass} ${color} border-t-transparent border-solid rounded-full animate-spin`} role="status"></div>
+                </div>
+            );
+        };
+
+        const Toast = ({ message, type = 'info', onClose, duration = 3000 }) => {
+            useEffect(() => {
+                const timer = setTimeout(() => { onClose(); }, duration);
+                return () => clearTimeout(timer);
+            }, [onClose, duration]);
+
+            const baseClasses = 'fixed top-24 right-4 z-[100] p-4 rounded-lg shadow-lg text-white animate-fade-in flex items-center justify-between min-w-[250px] max-w-md';
+            const typeClasses = {
+                success: 'bg-green-500 hover:bg-green-600',
+                error: 'bg-red-500 hover:bg-red-600',
+                warning: 'bg-yellow-500 hover:bg-yellow-600 text-black',
+                info: 'bg-blue-500 hover:bg-blue-600',
+            };
+
+            return (
+                <div className={`${baseClasses} ${typeClasses[type] || typeClasses.info}`}>
+                    <p className="flex-grow mr-4 rtl:ml-4 rtl:mr-0">{message}</p>
+                    <button
+                        onClick={onClose}
+                        className={`ml-2 rtl:mr-2 rtl:ml-0 p-1 rounded-full ${type === 'warning' ? 'text-black hover:bg-black/10' : 'text-white hover:bg-white/20'} focus:outline-none focus:ring-2 focus:ring-white/50`}
+                        aria-label="Close notification"
+                    >
+                        <Icons.XMark />
+                    </button>
+                </div>
+            );
+        };
+
+        const Header = ({ savedCount, compareCount, onToggleSaved, onToggleCompare }) => {
+            const { isDarkMode, toggleDarkMode } = useTheme();
+            const { isArabic, toggleLanguage, t } = useLanguage();
+            const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+            const navItems = [
+                { name: t('home'), href: '#' },
+                { name: t('features'), href: '#' },
+                { name: t('about'), href: '#' },
+                { name: t('contact'), href: '#' },
+            ];
+
+            return (
+                <header className="gradient-bg text-white sticky top-0 z-40 shadow-lg">
+                    <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+                        <div className="flex items-center">
+                            <Icons.BuildingOffice className="h-8 w-8 mr-2 rtl:ml-2 rtl:mr-0" />
+                            <h1 className="text-xl sm:text-2xl font-bold">{t('propertyViewer')}</h1>
+                        </div>
+                        <nav className="hidden md:flex items-center space-x-4 rtl:space-x-reverse">
+                            {navItems.map((item) => (
+                                <a key={item.name} href={item.href} className="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors">
+                                    {item.name}
+                                </a>
+                            ))}
+                        </nav>
+                        <div className="hidden md:flex items-center space-x-2 rtl:space-x-reverse">
+                            <button onClick={onToggleSaved} className="relative p-2 rounded-full hover:bg-white/20 transition-colors" aria-label={t('savedProperties')}>
+                                <Icons.HeartOutline />
+                                {savedCount > 0 && <span className="absolute -top-1 -right-1 bg-accent text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">{savedCount}</span>}
+                            </button>
+                            <button onClick={onToggleCompare} className="relative p-2 rounded-full hover:bg-white/20 transition-colors" aria-label={t('compareProperties')}>
+                                <Icons.ArrowsRightLeft />
+                                {compareCount > 0 && <span className="absolute -top-1 -right-1 bg-accent text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">{compareCount}</span>}
+                            </button>
+                            <button onClick={toggleLanguage} className="p-2 rounded-full hover:bg-white/20 transition-colors flex items-center" aria-label={t('toggleLanguage')}>
+                                <Icons.Language className="mr-1 rtl:ml-1 rtl:mr-0"/>{isArabic ? 'EN' : 'AR'}
+                            </button>
+                            <button onClick={toggleDarkMode} className="p-2 rounded-full hover:bg-white/20 transition-colors" aria-label={isDarkMode ? t('lightMode') : t('darkMode')}>
+                                {isDarkMode ? <Icons.Sun /> : <Icons.Moon />}
+                            </button>
+                        </div>
+                        <div className="md:hidden flex items-center space-x-2 rtl:space-x-reverse">
+                             <button onClick={onToggleSaved} className="relative p-2 rounded-full hover:bg-white/20 transition-colors" aria-label={t('savedProperties')}>
+                                <Icons.HeartOutline />
+                                {savedCount > 0 && <span className="absolute -top-1 -right-1 bg-accent text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">{savedCount}</span>}
+                            </button>
+                            <button onClick={onToggleCompare} className="relative p-2 rounded-full hover:bg-white/20 transition-colors" aria-label={t('compareProperties')}>
+                                <Icons.ArrowsRightLeft />
+                                {compareCount > 0 && <span className="absolute -top-1 -right-1 bg-accent text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">{compareCount}</span>}
+                            </button>
+                            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 rounded-full hover:bg-white/20 transition-colors" aria-label="Toggle menu" aria-expanded={mobileMenuOpen}>
+                                {mobileMenuOpen ? <Icons.XMark /> : <Icons.Bars3 />}
+                            </button>
+                        </div>
+                    </div>
+                    {mobileMenuOpen && (
+                        <div className="md:hidden gradient-bg shadow-lg absolute top-full left-0 right-0 z-30 animate-fade-in">
+                            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                                {navItems.map((item) => (
+                                    <a key={item.name} href={item.href} className="block px-3 py-2 rounded-md text-base font-medium hover:bg-white/10 transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                                        {item.name}
+                                    </a>
+                                ))}
+                                <div className="flex items-center space-x-4 rtl:space-x-reverse pt-4 mt-4 border-t border-white/20 px-3">
+                                    <button onClick={() => { toggleLanguage(); setMobileMenuOpen(false); }} className="flex-1 py-2 px-3 rounded-md text-sm font-medium bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center">
+                                        <Icons.Language className="h-5 w-5 mr-1 rtl:ml-1 rtl:mr-0"/>{isArabic ? 'EN' : 'AR'}
+                                    </button>
+                                    <button onClick={() => { toggleDarkMode(); setMobileMenuOpen(false); }} className="flex-1 py-2 px-3 rounded-md text-sm font-medium bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center">
+                                        {isDarkMode ? <><Icons.Sun className="h-5 w-5 mr-1 rtl:ml-1 rtl:mr-0"/> {t('lightMode')}</> : <><Icons.Moon className="h-5 w-5 mr-1 rtl:ml-1 rtl:mr-0"/> {t('darkMode')}</>}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </header>
+            );
+        };
+
+        const SearchBar = ({ initialSearchTerm, onSearchChange, data }) => {
+            const { t } = useLanguage();
+            const [searchTerm, setSearchTerm] = useState(initialSearchTerm || '');
+            const [suggestions, setSuggestions] = useState([]);
+            const [showSuggestions, setShowSuggestions] = useState(false);
+            const searchRef = useRef(null);
+            const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
+            useEffect(() => { onSearchChange(debouncedSearchTerm); }, [debouncedSearchTerm, onSearchChange]);
+            useEffect(() => { setSearchTerm(initialSearchTerm || ''); }, [initialSearchTerm]);
+
+            useEffect(() => {
+                if (searchTerm.length > 1) {
+                    const lowerSearchTerm = searchTerm.toLowerCase();
+                    const filteredSuggestions = data
+                        .flatMap(item => [
+                            { type: 'compound', value: item.CompoundName },
+                            { type: 'city', value: item.PropertyListings?.[0]?.DataCity },
+                            { type: 'developer', value: item.PropertyListings?.[0]?.DataDeveloper },
+                        ])
+                        .filter(item => item.value && item.value.toLowerCase().includes(lowerSearchTerm))
+                        .map(item => item.value)
+                        .filter((value, index, self) => self.indexOf(value) === index)
+                        .slice(0, 7);
+                    setSuggestions(filteredSuggestions);
+                    setShowSuggestions(true);
+                } else {
+                    setSuggestions([]);
+                    setShowSuggestions(false);
+                }
+            }, [searchTerm, data]);
+
+            useEffect(() => {
+                const handleClickOutside = (event) => {
+                    if (searchRef.current && !searchRef.current.contains(event.target)) setShowSuggestions(false);
+                };
+                document.addEventListener('mousedown', handleClickOutside);
+                return () => document.removeEventListener('mousedown', handleClickOutside);
+            }, []);
+
+            const handleSuggestionClick = (suggestion) => {
+                setSearchTerm(suggestion);
+                setShowSuggestions(false);
+            };
+
+            return (
+                <div className="relative mb-6" ref={searchRef}>
+                    <div className="relative">
+                        <input
+                            type="text"
+                            placeholder={t('searchPlaceholder')}
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onFocus={() => searchTerm.length > 1 && setShowSuggestions(true)}
+                            className="w-full p-4 pl-12 rtl:pr-12 rtl:pl-4 border border-light-border dark:border-dark-border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary bg-light-card dark:bg-dark-card text-light-text dark:text-dark-text placeholder-light-textSecondary dark:placeholder-dark-textSecondary"
+                        />
+                        <Icons.MagnifyingGlass className="h-5 w-5 text-gray-400 absolute top-1/2 left-4 rtl:right-4 rtl:left-auto transform -translate-y-1/2" />
+                    </div>
+                    {showSuggestions && suggestions.length > 0 && (
+                        <ul className="absolute w-full border border-light-border dark:border-dark-border rounded-xl mt-1 shadow-lg z-20 bg-light-card dark:bg-dark-card text-light-text dark:text-dark-text overflow-hidden">
+                            {suggestions.map((suggestion, index) => (
+                                <li key={index} onClick={() => handleSuggestionClick(suggestion)} className="p-3 hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer text-sm">
+                                    {suggestion}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+            );
+        };
+
+        // --- Filter Bar Components ---
+        const DropdownCheckbox = ({ label, options, selectedValues, onChange, translations }) => {
+            const [isOpen, setIsOpen] = useState(false);
+            const { isArabic, t } = useLanguage(); // Need 't' here too
+            const dropdownRef = useRef(null);
+
+            const getDisplayValue = () => {
+                if (!selectedValues || selectedValues.length === 0) return label;
+                if (selectedValues.length === 1) return translations[selectedValues[0]] || selectedValues[0];
+                 // Adjust for language direction
+                 const countLabel = `(${selectedValues.length})`;
+                return isArabic ? `${countLabel} ${label}` : `${label} ${countLabel}`;
+            };
+
+            // Close dropdown on click outside
+            useEffect(() => {
+                const handleClickOutside = (event) => {
+                    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                        setIsOpen(false);
+                    }
+                };
+                if (isOpen) document.addEventListener('mousedown', handleClickOutside);
+                else document.removeEventListener('mousedown', handleClickOutside);
+                return () => document.removeEventListener('mousedown', handleClickOutside);
+            }, [isOpen]);
+
+
+            return (
+                <div className="relative" ref={dropdownRef}>
+                    <button
+                        type="button"
+                        onClick={() => setIsOpen(!isOpen)}
+                        className={`w-full flex justify-between items-center p-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary ${isOpen ? 'ring-2 ring-primary' : ''} bg-light-bg dark:bg-dark-bg border-light-border dark:border-dark-border text-light-text dark:text-dark-text text-sm`}
+                        aria-haspopup="listbox"
+                        aria-expanded={isOpen}
+                    >
+                        <span className="truncate pr-2 rtl:pl-2 rtl:pr-0">{getDisplayValue()}</span>
+                        <Icons.ChevronDown className={`h-4 w-4 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {isOpen && (
+                        <div className="absolute z-10 mt-1 w-full max-h-60 overflow-y-auto bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-lg shadow-lg" role="listbox">
+                             {/* Optional: Select/Deselect All */}
+                             <div className="p-2 border-b border-light-border dark:border-dark-border">
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); onChange('__ALL__'); }}
+                                    className="w-full text-left rtl:text-right text-xs text-primary hover:underline"
+                                >
+                                    {selectedValues?.length === options.length ? t('deselectAll') : t('selectAll')} {/* Add translations */}
+                                </button>
+                            </div>
+                            {options.map((option) => (
+                                <label key={option} className="flex items-center p-3 space-x-3 rtl:space-x-reverse cursor-pointer hover:bg-primary/10 dark:hover:bg-primary/20" role="option" aria-selected={selectedValues?.includes(option)}>
+                                    <input
+                                        type="checkbox"
+                                        value={option}
+                                        checked={selectedValues?.includes(option) || false}
+                                        onChange={(e) => { e.stopPropagation(); onChange(option); }}
+                                        className="rounded border-gray-300 dark:border-gray-600 text-primary focus:ring-primary bg-white dark:bg-dark-bg"
+                                        tabIndex="-1" // Prevent direct focus, manage via label/list navigation if needed
+                                    />
+                                    <span className="text-sm">{translations[option] || option}</span>
+                                </label>
+                            ))}
+                            {options.length === 0 && <div className="p-3 text-sm text-light-textSecondary dark:text-dark-textSecondary">{t('noOptionsAvailable')}</div>} {/* Add translation */}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const BasicFilters = ({ filters, handleFilterChange, handleMultiSelectChange, priceRanges, bedroomsOptions, options }) => {
+            const { t, isArabic } = useLanguage();
+            const translatedOptions = (opts) => opts.reduce((acc, opt) => { acc[opt] = t(opt); return acc; }, {});
+            const propertyTypeTranslations = translatedOptions(options.propertyTypes);
+            const cityTranslations = translatedOptions(options.cities);
+
+            return (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label className="block text-sm font-medium mb-1">{t('priceRange')}</label>
+                        <select value={JSON.stringify({ min: filters.priceMin, max: filters.priceMax })} onChange={e => { const r = JSON.parse(e.target.value); handleFilterChange('priceMin', r.min); handleFilterChange('priceMax', r.max); }}>
+                            {priceRanges.map((range, index) => <option key={index} value={JSON.stringify(range.value)}>{range.label}</option>)}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">{t('bedrooms')}</label>
+                        <select value={filters.bedrooms} onChange={e => handleFilterChange('bedrooms', e.target.value)}>
+                            {bedroomsOptions.map((option) => <option key={option} value={option}>{option === 'All' ? t('all') : option === '5+' ? t('xPlusRooms', {count: 5}) : option}</option>)}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">{t('propertyType')}</label>
+                        <DropdownCheckbox label={t('propertyType')} options={options.propertyTypes} selectedValues={filters.propertyTypes || []} onChange={(option) => handleMultiSelectChange('propertyTypes', option)} translations={propertyTypeTranslations} />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">{t('city')}</label>
+                        <DropdownCheckbox label={t('city')} options={options.cities} selectedValues={filters.cities || []} onChange={(option) => handleMultiSelectChange('cities', option)} translations={cityTranslations} />
+                    </div>
+                </div>
+            );
+        };
+
+        const AdvancedFilters = ({ filters, handleFilterChange, handleMultiSelectChange, deliveryOptions, options }) => {
+            const { t, isArabic } = useLanguage();
+            const translatedOptions = (opts) => opts.reduce((acc, opt) => { acc[opt] = t(opt); return acc; }, {});
+            const developerTranslations = translatedOptions(options.developers);
+            const finishingTranslations = translatedOptions(options.finishingOptions);
+            const statusTranslations = translatedOptions(options.statusOptions);
+
+            return (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label className="block text-sm font-medium mb-1">{t('developer')}</label>
+                        <DropdownCheckbox label={t('developer')} options={options.developers} selectedValues={filters.developers || []} onChange={(option) => handleMultiSelectChange('developers', option)} translations={developerTranslations} />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">{t('finishing')}</label>
+                        <DropdownCheckbox label={t('finishing')} options={options.finishingOptions} selectedValues={filters.finishing || []} onChange={(option) => handleMultiSelectChange('finishing', option)} translations={finishingTranslations} />
+                    </div>
+                     <div>
+                        <label className="block text-sm font-medium mb-1">{t('status')}</label>
+                        <DropdownCheckbox label={t('status')} options={options.statusOptions} selectedValues={filters.status || []} onChange={(option) => handleMultiSelectChange('status', option)} translations={statusTranslations} />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">{t('deliveryYears')}</label>
+                        <select value={filters.delivery} onChange={e => handleFilterChange('delivery', e.target.value)}>
+                            {deliveryOptions.map((option) => <option key={option} value={option}>{option === 'All' ? t('all') : option === '3+' ? t('xPlusYears', { count: 3 }) : option}</option>)}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">{t('areaMin')}</label>
+                        <input type="number" min="0" value={filters.areaMin === 0 ? '' : filters.areaMin} onChange={e => handleFilterChange('areaMin', Number(e.target.value) || 0)} placeholder={t('minAreaPlaceholder')} />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">{t('areaMax')}</label>
+                        <input type="number" min="0" value={filters.areaMax === Infinity ? '' : filters.areaMax} onChange={e => handleFilterChange('areaMax', Number(e.target.value) || Infinity)} placeholder={t('maxAreaPlaceholder')} />
+                    </div>
+                </div>
+            );
+        };
+
+        const FilterBar = ({ filters, updateFilters, resetFilters, data }) => {
+            const { t, isArabic } = useLanguage();
+            const [isExpanded, setIsExpanded] = useState(false);
+
+            const dynamicOptions = useMemo(() => ({
+                cities: Utils.getUniqueOptions(data, null, 'DataCity'),
+                developers: Utils.getUniqueOptions(data, null, 'DataDeveloper'),
+                propertyTypes: Utils.getUniqueOptions(data, null, 'PropertyType'),
+                finishingOptions: Utils.getUniqueOptions(data, null, 'DataFinishing'),
+                statusOptions: Utils.getUniqueOptions(data, null, 'DataStatus_Readable'),
+            }), [data]);
+
+             const priceRanges = useMemo(() => [ // Memoize this too
+                { label: t('allPrices'), value: { min: 0, max: Infinity } },
+                { label: t('underXMillion', { value: 10 }), value: { min: 0, max: 10000000 } },
+                { label: t('xToYMillion', {min: 10, max: 20}), value: { min: 10000000, max: 20000000 } },
+                { label: t('xToYMillion', {min: 20, max: 30}), value: { min: 20000000, max: 30000000 } },
+                { label: t('xToYMillion', {min: 30, max: 40}), value: { min: 30000000, max: 40000000 } },
+                { label: t('overXMillion', { value: 40 }), value: { min: 40000000, max: Infinity } },
+            ], [t]); // Recreate if language changes
+
+            const bedroomsOptions = ['All', '1', '2', '3', '4', '5+'];
+            const deliveryOptions = ['All', '1', '2', '3+'];
+
+            const handleFilterChange = useCallback((filterName, value) => {
+                updateFilters({ [filterName]: value });
+            }, [updateFilters]);
+
+             const handleMultiSelectChange = useCallback((filterName, optionValue) => {
+                 updateFilters(prevFilters => {
+                    const currentSelection = prevFilters[filterName] || [];
+                    let newSelection;
+
+                     if (optionValue === '__ALL__') { // Handle Select/Deselect All
+                         const allOptions = dynamicOptions[filterName.replace(/s$/, 'Options')] || dynamicOptions[filterName] || []; // Heuristic to find original options array
+                         newSelection = currentSelection.length === allOptions.length ? [] : [...allOptions];
+                     } else {
+                        if (currentSelection.includes(optionValue)) {
+                            newSelection = currentSelection.filter(item => item !== optionValue);
+                        } else {
+                            newSelection = [...currentSelection, optionValue];
+                        }
+                     }
+                    return { ...prevFilters, [filterName]: newSelection };
+                 });
+            }, [updateFilters, dynamicOptions]);
+
+            return (
+                <div className="bg-light-card dark:bg-dark-card text-light-text dark:text-dark-text rounded-2xl shadow-lg mb-6 transition-colors duration-300">
+                    <div className="p-4 border-b border-light-border dark:border-dark-border flex justify-between items-center">
+                        <h2 className="text-lg font-semibold flex items-center">
+                            <Icons.Funnel className="mr-2 rtl:ml-2 rtl:mr-0" />{t('filterProperties')}
+                        </h2>
+                        <button onClick={() => setIsExpanded(!isExpanded)} className="text-sm font-medium flex items-center text-primary hover:underline focus:outline-none" aria-expanded={isExpanded}>
+                            {isExpanded ? t('showLess') : t('advancedFilters')}
+                            {isExpanded ? <Icons.ChevronUp className="ml-1 rtl:mr-1 rtl:ml-0" /> : <Icons.ChevronDown className="ml-1 rtl:mr-1 rtl:ml-0" />}
+                        </button>
+                    </div>
+                    <div className="p-4">
+                        <BasicFilters filters={filters} handleFilterChange={handleFilterChange} handleMultiSelectChange={handleMultiSelectChange} priceRanges={priceRanges} bedroomsOptions={bedroomsOptions} options={dynamicOptions} />
+                        {isExpanded && (
+                            <div className="mt-4 pt-4 border-t border-light-border dark:border-dark-border animate-fade-in">
+                                <AdvancedFilters filters={filters} handleFilterChange={handleFilterChange} handleMultiSelectChange={handleMultiSelectChange} deliveryOptions={deliveryOptions} options={dynamicOptions} />
+                            </div>
+                        )}
+                        <div className="mt-6 flex justify-end">
+                            <button onClick={resetFilters} className="px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:focus:ring-offset-dark-card">
+                                {t('reset')}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // --- Card, Modal, DataDisplay Components ---
+        const placeholderImage = "https://via.placeholder.com/400x300.png?text=No+Image";
+        const Card = React.memo(({ item, isFavorite, isCompared, onToggleFavorite, onToggleCompare }) => {
+            const { t, isArabic } = useLanguage();
+            const [isModalOpen, setIsModalOpen] = useState(false);
+
+            if (!item?.PropertyListings?.[0]) return null;
+            const property = item.PropertyListings[0];
+            const featuredImage = item.MaterialLinks?.Photos?.[0] || placeholderImage;
+
+            return (
+                <>
+                    <div className="relative flex flex-col rounded-2xl shadow-lg overflow-hidden card-hover-effect bg-light-card dark:bg-dark-card text-light-text dark:text-dark-text">
+                        <div className="relative">
+                            <img src={featuredImage} alt={item.CompoundName || 'Property image'} className="w-full h-48 object-cover" loading="lazy" onError={(e) => { e.target.onerror = null; e.target.src=placeholderImage; }} />
+                            <div className="absolute top-3 left-3 rtl:right-3 rtl:left-auto flex flex-col space-y-2">
+                                <button onClick={(e) => { e.stopPropagation(); onToggleFavorite(item.CompoundId); }} className="p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-md hover:bg-white text-gray-700 hover:text-red-500 transition-colors" aria-label={t(isFavorite ? 'removeFromFavorites' : 'addToFavorites')}>
+                                    {isFavorite ? <Icons.HeartSolid className="w-5 h-5 text-red-500" /> : <Icons.HeartOutline className="w-5 h-5" />}
+                                </button>
+                                <button onClick={(e) => { e.stopPropagation(); onToggleCompare(item.CompoundId); }} className="p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-md hover:bg-white text-gray-700 hover:text-primary transition-colors" aria-label={t(isCompared ? 'removeFromCompare' : 'addToCompare')}>
+                                    {isCompared ? <Icons.ArrowsRightLeftSolid className="w-5 h-5 text-primary" /> : <Icons.ArrowsRightLeft className="w-5 h-5" />}
+                                </button>
+                            </div>
+                            {property.DataStatus_Readable && <span className="absolute bottom-3 right-3 rtl:left-3 rtl:right-auto bg-primary/80 backdrop-blur-sm text-white px-2 py-1 rounded text-xs font-medium">{t(property.DataStatus_Readable)}</span>}
+                        </div>
+                        <div className="p-5 flex flex-col flex-grow">
+                             <h2 className="text-lg font-bold text-primary truncate" title={item.CompoundName}>{item.CompoundName}</h2>
+                             <p className="text-sm text-light-textSecondary dark:text-dark-textSecondary mt-1 truncate">{property.DataCity} {property.DataArea ? `- ${property.DataArea}` : ''}</p>
+                             <div className="mt-3 text-sm space-y-1 text-light-text dark:text-dark-text">
+                                {property.PropertyType && <div><strong>{t('propertyType')}:</strong> {t(property.PropertyType)}</div>}
+                                {property.DataBedRooms && <div><strong>{t('bedrooms')}:</strong> {property.DataBedRooms}</div>}
+                                {(property.DataBuiltUpAreaFrom || property.DataBuiltUpAreaTo) && <div><strong>{t('areaShort')}:</strong> {property.DataBuiltUpAreaFrom || '?'}{property.DataBuiltUpAreaTo ? ` - ${property.DataBuiltUpAreaTo}` : ''} {t('sqm')}</div>}
+                            </div>
+                            <p className="text-lg font-semibold text-secondary mt-3">
+                                {property.DataUnitTotalPriceFrom ? Utils.formatCurrency(property.DataUnitTotalPriceFrom, isArabic ? 'ar-EG' : 'en-US') : t('priceOnRequest')}
+                            </p>
+                            <div className="mt-auto pt-4">
+                                <button onClick={() => setIsModalOpen(true)} className="w-full py-2.5 px-4 bg-primary text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:focus:ring-offset-dark-card">
+                                    {t('viewDetails')}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {isModalOpen && <Modal item={item} onClose={() => setIsModalOpen(false)} isFavorite={isFavorite} isCompared={isCompared} onToggleFavorite={onToggleFavorite} onToggleCompare={onToggleCompare} />}
+                </>
+            );
+        });
+
+        const placeholderModalImage = "https://via.placeholder.com/600x400.png?text=No+Image";
+        const Modal = ({ item, onClose, isFavorite, isCompared, onToggleFavorite, onToggleCompare }) => {
+            const { t, isArabic } = useLanguage();
+            const modalRef = useRef(null);
+
+            useEffect(() => {
+                const handleKeyDown = (e) => { if (e.key === 'Escape') onClose(); };
+                window.addEventListener('keydown', handleKeyDown);
+                document.body.style.overflow = 'hidden'; // Prevent body scroll
+                return () => {
+                    window.removeEventListener('keydown', handleKeyDown);
+                    document.body.style.overflow = 'auto'; // Restore scroll
+                };
+            }, [onClose]);
+
+            const handleBackdropClick = (e) => { if (modalRef.current && !modalRef.current.contains(e.target)) onClose(); };
+
+            if (!item?.PropertyListings?.[0]) return null;
+            const property = item.PropertyListings[0];
+            const projectDetails = item.ProjectDetails?.flatMap(section => section.Details || []) || [];
+            const photos = item.MaterialLinks?.Photos || [];
+            const layouts = item.LayoutImages || [];
+            const brochures = item.MaterialLinks?.Brochure || [];
+            const masterPlans = item.MaterialLinks?.MasterPlan || [];
+
+            const renderDetailItem = (labelKey, value, unitKey = '') => {
+                if (value === null || value === undefined || value === '') return null;
+                const displayValue = typeof value === 'boolean' ? (value ? t('yes') : t('no')) : value; // Add translation for boolean
+                return <div className="py-2 grid grid-cols-3 gap-4"><dt className="text-sm font-medium text-light-textSecondary dark:text-dark-textSecondary">{t(labelKey)}</dt><dd className="text-sm text-light-text dark:text-dark-text col-span-2">{displayValue} {unitKey && t(unitKey)}</dd></div>;
+            };
+            const renderPrice = (labelKey, value) => {
+                if (value === null || value === undefined || value === '') return null;
+                return <div className="py-2 grid grid-cols-3 gap-4"><dt className="text-sm font-medium text-light-textSecondary dark:text-dark-textSecondary">{t(labelKey)}</dt><dd className="text-sm text-light-text dark:text-dark-text col-span-2 font-semibold">{Utils.formatCurrency(value, isArabic ? 'ar-EG' : 'en-US')}</dd></div>;
+            };
+
+            return (
+                <div className="fixed inset-0 bg-black/70 modal-backdrop flex justify-center items-center z-50 p-4 animate-fade-in" onClick={handleBackdropClick}>
+                    <div ref={modalRef} className="bg-light-card dark:bg-dark-card text-light-text dark:text-dark-text rounded-2xl shadow-xl max-w-5xl w-full max-h-[90vh] overflow-y-auto relative flex flex-col" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+                         <div className="sticky top-0 bg-light-card dark:bg-dark-card z-10 p-5 border-b border-light-border dark:border-dark-border flex justify-between items-center">
+                            <h2 id="modal-title" className="text-2xl font-bold text-primary">{item.CompoundName}</h2>
+                            <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                                 <button onClick={(e) => { e.stopPropagation(); onToggleFavorite(item.CompoundId); }} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400" aria-label={t(isFavorite ? 'removeFromFavorites' : 'addToFavorites')}>
+                                    {isFavorite ? <Icons.HeartSolid className="w-5 h-5 text-red-500" /> : <Icons.HeartOutline className="w-5 h-5" />}
+                                </button>
+                                <button onClick={(e) => { e.stopPropagation(); onToggleCompare(item.CompoundId); }} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400" aria-label={t(isCompared ? 'removeFromCompare' : 'addToCompare')}>
+                                    {isCompared ? <Icons.ArrowsRightLeftSolid className="w-5 h-5 text-primary" /> : <Icons.ArrowsRightLeft className="w-5 h-5" />}
+                                </button>
+                                <button onClick={onClose} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400" aria-label={t('close')}><Icons.XMark /></button>
+                            </div>
+                         </div>
+                         <div className="p-6 flex-grow space-y-8">
+                            <section aria-labelledby="overview-title">
+                                <h3 id="overview-title" className="text-xl font-semibold text-primary mb-4 flex items-center"><Icons.ListBullet className="mr-2 rtl:ml-2 rtl:mr-0"/>{t('overview')}</h3>
+                                <dl className="divide-y divide-light-border dark:divide-dark-border">
+                                    {renderDetailItem('city', property.DataCity)}
+                                    {renderDetailItem('areaShort', property.DataArea)}
+                                    {renderDetailItem('developer', property.DataDeveloper)}
+                                    {renderDetailItem('propertyType', t(property.PropertyType))}
+                                    {renderDetailItem('bedrooms', property.DataBedRooms)}
+                                    {renderDetailItem('areaShort', `${property.DataBuiltUpAreaFrom || '?'} - ${property.DataBuiltUpAreaTo || '?'}`, 'sqm')}
+                                    {renderPrice('priceShort', property.DataUnitTotalPriceFrom)}
+                                    {renderPrice('discountPrice', property.DataUnitTotalPriceDiscountFrom)}
+                                    {renderDetailItem('paymentPlan', property.DataPaymentPlan)}
+                                    {renderDetailItem('deliveryShort', property.DataDeliveryFrom, property.DataDeliveryFrom ? (property.DataDeliveryFrom > 1 ? 'years' : 'year') : '')}
+                                    {renderDetailItem('status', t(property.DataStatus_Readable))}
+                                    {renderDetailItem('finishing', t(property.DataFinishing))}
+                                </dl>
+                                {property.DataDescription && <div className="mt-4"><h4 className="text-md font-medium text-light-textSecondary dark:text-dark-textSecondary mb-1">{t('description')}</h4><p className="text-sm text-light-text dark:text-dark-text leading-relaxed">{property.DataDescription}</p></div>}
+                            </section>
+                             {property.DataCoordinates && (
+                                <section aria-labelledby="location-title">
+                                    <h3 id="location-title" className="text-xl font-semibold text-primary mb-3 flex items-center"><Icons.MapPin className="mr-2 rtl:ml-2 rtl:mr-0"/>{t('location')}</h3>
+                                    <div className="aspect-video rounded-xl overflow-hidden border border-light-border dark:border-dark-border">
+                                        <iframe src={property.DataCoordinates} width="100%" height="100%" style={{ border: 0 }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" title={`${item.CompoundName} Location`}></iframe>
+                                    </div>
+                                </section>
+                             )}
+                             {photos.length > 0 && (
+                                <section aria-labelledby="photos-title">
+                                    <h3 id="photos-title" className="text-xl font-semibold text-primary mb-3 flex items-center"><Icons.Photo className="mr-2 rtl:ml-2 rtl:mr-0"/>{t('photos')}</h3>
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                                        {photos.map((photo, index) => <a href={photo} target="_blank" rel="noopener noreferrer" key={index} className="block aspect-video rounded-lg overflow-hidden group"><img src={photo} alt={`${item.CompoundName} - ${t('photo')} ${index + 1}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" onError={(e) => { e.target.onerror = null; e.target.src=placeholderModalImage; }} /></a>)}
+                                    </div>
+                                </section>
+                             )}
+                             {projectDetails.length > 0 && (
+                                <section aria-labelledby="project-details-title">
+                                    <h3 id="project-details-title" className="text-xl font-semibold text-primary mb-3 flex items-center"><Icons.BuildingLibrary className="mr-2 rtl:ml-2 rtl:mr-0"/>{t('projectDetails')}</h3>
+                                    <div className="overflow-x-auto rounded-lg border border-light-border dark:border-dark-border">
+                                        <table className="min-w-full divide-y divide-light-border dark:divide-dark-border text-sm">
+                                            <thead className="bg-gray-50 dark:bg-gray-700/50"><tr><th scope="col" className="px-4 py-3 text-left rtl:text-right font-medium text-light-textSecondary dark:text-dark-textSecondary tracking-wider">{t('propertyType')}</th><th scope="col" className="px-4 py-3 text-left rtl:text-right font-medium text-light-textSecondary dark:text-dark-textSecondary tracking-wider">{t('bedroomsShort')}</th><th scope="col" className="px-4 py-3 text-left rtl:text-right font-medium text-light-textSecondary dark:text-dark-textSecondary tracking-wider">{t('areaShort')} ({t('sqm')})</th><th scope="col" className="px-4 py-3 text-left rtl:text-right font-medium text-light-textSecondary dark:text-dark-textSecondary tracking-wider">{t('priceShort')}</th><th scope="col" className="px-4 py-3 text-left rtl:text-right font-medium text-light-textSecondary dark:text-dark-textSecondary tracking-wider">{t('deliveryShort')}</th></tr></thead>
+                                            <tbody className="bg-light-card dark:bg-dark-card divide-y divide-light-border dark:divide-dark-border">
+                                                {projectDetails.map((detail, index) => <tr key={index} className="hover:bg-gray-50/50 dark:hover:bg-gray-700/30"><td className="px-4 py-3 whitespace-nowrap">{detail.PropertyType ? t(detail.PropertyType) : '-'}</td><td className="px-4 py-3 whitespace-nowrap">{detail.Bedrooms || '-'}</td><td className="px-4 py-3 whitespace-nowrap">{detail.BuiltUpArea || '-'}</td><td className="px-4 py-3 whitespace-nowrap font-medium">{detail.UnitTotalPrice ? Utils.formatCurrency(detail.UnitTotalPrice, isArabic ? 'ar-EG' : 'en-US') : '-'}</td><td className="px-4 py-3 whitespace-nowrap">{detail.Delivery || '-'}</td></tr>)}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </section>
+                             )}
+                            {layouts.length > 0 && (
+                                <section aria-labelledby="layouts-title">
+                                    <h3 id="layouts-title" className="text-xl font-semibold text-primary mb-3">{t('layouts')}</h3>
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                                        {layouts.map((layout, index) => <a href={layout.FullUrl} target="_blank" rel="noopener noreferrer" key={index} className="block aspect-square rounded-lg overflow-hidden group border border-light-border dark:border-dark-border"><img src={layout.FullUrl} alt={`${t('layout')} ${index + 1}`} className="w-full h-full object-contain group-hover:opacity-80 transition-opacity duration-300 p-1" loading="lazy" onError={(e) => { e.target.onerror = null; e.target.src=placeholderModalImage; }} /></a>)}
+                                    </div>
+                                </section>
+                            )}
+                            {(brochures.length > 0 || masterPlans.length > 0) && (
+                                <section aria-labelledby="links-title">
+                                    <h3 id="links-title" className="text-xl font-semibold text-primary mb-3 flex items-center"><Icons.Link className="mr-2 rtl:ml-2 rtl:mr-0"/>{t('additionalLinks')}</h3>
+                                    <div className="space-y-3 text-sm">
+                                        {brochures.length > 0 && <div><strong className="text-light-textSecondary dark:text-dark-textSecondary">{t('brochures')}</strong>{brochures.map((link, index) => <a href={link} target="_blank" rel="noopener noreferrer" key={`brochure-${index}`} className="block text-primary hover:underline mt-1">{t('brochureX', { index: index + 1 })}</a>)}</div>}
+                                        {masterPlans.length > 0 && <div><strong className="text-light-textSecondary dark:text-dark-textSecondary">{t('masterPlan')}</strong>{masterPlans.map((link, index) => <a href={link} target="_blank" rel="noopener noreferrer" key={`masterplan-${index}`} className="block text-primary hover:underline mt-1">{t('masterPlanX', { index: index + 1 })}</a>)}</div>}
+                                    </div>
+                                </section>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+         const DataDisplay = ({ data, favorites, compareList, toggleFavorite, toggleCompare }) => {
+            const { t } = useLanguage();
+            if (!data || data.length === 0) {
+                return (
+                    <div className="text-center py-16 text-light-textSecondary dark:text-dark-textSecondary">
+                        <Icons.NoResults />
+                        <p className="text-lg font-medium">{t('noResults')}</p>
+                        <p className="text-sm">{t('tryAdjustingFilters')}</p>
+                    </div>
+                );
+            }
+            return (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                    {data.map(item => <Card key={item.CompoundId} item={item} isFavorite={favorites.includes(item.CompoundId)} isCompared={compareList.includes(item.CompoundId)} onToggleFavorite={toggleFavorite} onToggleCompare={toggleCompare} />)}
+                </div>
+            );
+        };
+
+        // --- Pagination, Sidebar, Footer, CompareModal Components ---
+        const Pagination = ({ currentPage, setCurrentPage, totalItems, itemsPerPage, setItemsPerPage }) => {
+            const { t, isArabic } = useLanguage();
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+            if (totalItems === 0 || totalPages <= 1) return null; // Hide if no results or only one page
+
+            const handlePageChange = (newPage) => { if (newPage >= 1 && newPage <= totalPages) { setCurrentPage(newPage); window.scrollTo(0, 0); } };
+            const handleItemsPerPageChange = (e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); };
+
+            const getPageNumbers = () => {
+                const delta = 1; // Show fewer page numbers directly in single-file version
+                const range = [];
+                for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) range.push(i);
+                if (currentPage - delta > 2) range.unshift('...');
+                if (currentPage + delta < totalPages - 1) range.push('...');
+                range.unshift(1);
+                if (totalPages > 1) range.push(totalPages);
+                // Remove duplicates that might occur if totalPages is small
+                return [...new Set(range)];
+             };
+            const pageNumbers = getPageNumbers();
+
+            return (
+                <div className="flex flex-col sm:flex-row justify-between items-center mt-8 pt-6 border-t border-light-border dark:border-dark-border gap-4">
+                    <div className="flex items-center space-x-2 rtl:space-x-reverse text-sm">
+                        <label htmlFor="itemsPerPageSelect" className="text-light-textSecondary dark:text-dark-textSecondary">{t('itemsPerPage')}</label>
+                        <select id="itemsPerPageSelect" value={itemsPerPage} onChange={handleItemsPerPageChange} className="p-2 border border-light-border dark:border-dark-border rounded-md focus:outline-none focus:ring-1 focus:ring-primary bg-light-card dark:bg-dark-card text-light-text dark:text-dark-text text-sm !w-auto"> {/* !w-auto added */}
+                            {[9, 18, 27, 36].map(num => <option key={num} value={num}>{num}</option>)}
+                        </select>
+                        <span className="text-light-textSecondary dark:text-dark-textSecondary">{t('totalItems', {count: totalItems})}</span>
+                    </div>
+                    <nav className="flex items-center space-x-1 rtl:space-x-reverse" aria-label="Pagination">
+                        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className={`relative inline-flex items-center px-2 py-2 rounded-md text-sm font-medium ${currentPage === 1 ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed' : 'text-light-textSecondary dark:text-dark-textSecondary hover:bg-gray-100 dark:hover:bg-gray-700'}`}>
+                            <span className="sr-only">{t('previous')}</span>{isArabic ? <Icons.ChevronRight /> : <Icons.ChevronLeft />}
+                        </button>
+                        {pageNumbers.map((page, index) => page === '...' ? <span key={`ellipsis-${index}`} className="px-4 py-2 text-sm font-medium text-light-textSecondary dark:text-dark-textSecondary">...</span> : <button key={page} onClick={() => handlePageChange(page)} className={`relative inline-flex items-center px-4 py-2 rounded-md text-sm font-medium ${currentPage === page ? 'z-10 bg-primary/10 text-primary dark:bg-primary/20' : 'text-light-textSecondary dark:text-dark-textSecondary hover:bg-gray-100 dark:hover:bg-gray-700'}`} aria-current={currentPage === page ? 'page' : undefined}>{page}</button>)}
+                        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} className={`relative inline-flex items-center px-2 py-2 rounded-md text-sm font-medium ${currentPage === totalPages ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed' : 'text-light-textSecondary dark:text-dark-textSecondary hover:bg-gray-100 dark:hover:bg-gray-700'}`}>
+                            <span className="sr-only">{t('next')}</span>{isArabic ? <Icons.ChevronLeft /> : <Icons.ChevronRight />}
+                        </button>
+                    </nav>
+                </div>
+            );
+        };
+
+        const placeholderSidebarImage = "https://via.placeholder.com/100x100.png?text=No+Image";
+        const SavedPropertiesSidebar = ({ savedPropertyIds, data, onToggleFavorite, onClose, isOpen }) => {
+            const { t, isArabic } = useLanguage();
+            const savedItems = useMemo(() => data.filter(item => savedPropertyIds.includes(item.CompoundId)), [data, savedPropertyIds]);
+
+            // Effect to handle body scroll based on isOpen prop
+            useEffect(() => {
+                if (isOpen) document.body.style.overflow = 'hidden';
+                else document.body.style.overflow = 'auto';
+                // Cleanup function to restore scroll when component unmounts while open
+                return () => { document.body.style.overflow = 'auto'; };
+            }, [isOpen]);
+
+            return (
+                <>
+                    <div className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} onClick={onClose} aria-hidden={!isOpen} />
+                    <aside className={`fixed top-0 ${isArabic ? 'left-0' : 'right-0'} h-full w-full max-w-sm transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : (isArabic ? '-translate-x-full' : 'translate-x-full')} bg-light-card dark:bg-dark-card text-light-text dark:text-dark-text shadow-lg z-50 flex flex-col`} role="dialog" aria-modal="true" aria-labelledby="saved-properties-title">
+                        <div className="p-4 border-b border-light-border dark:border-dark-border flex justify-between items-center flex-shrink-0">
+                            <h2 id="saved-properties-title" className="text-lg font-semibold">{t('savedProperties')} ({savedItems.length})</h2>
+                            <button onClick={onClose} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400" aria-label={t('close')}><Icons.XMark /></button>
+                        </div>
+                        <div className="flex-grow p-4 overflow-y-auto scrollbar-hide">
+                            {savedItems.length > 0 ? (
+                                <ul className="space-y-3">
+                                    {savedItems.map(item => {
+                                        const property = item.PropertyListings?.[0];
+                                        const featuredImage = item.MaterialLinks?.Photos?.[0] || placeholderSidebarImage;
+                                        return (
+                                            <li key={item.CompoundId} className="flex items-start space-x-3 rtl:space-x-reverse p-3 rounded-lg border border-light-border dark:border-dark-border hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                                                <img src={featuredImage} alt={item.CompoundName} className="w-16 h-16 object-cover rounded-md flex-shrink-0" loading="lazy" onError={(e) => { e.target.onerror = null; e.target.src=placeholderSidebarImage; }} />
+                                                <div className="flex-1 min-w-0">
+                                                    <h3 className="text-sm font-semibold truncate" title={item.CompoundName}>{item.CompoundName}</h3>
+                                                    <p className="text-xs text-light-textSecondary dark:text-dark-textSecondary truncate">{property?.DataCity}</p>
+                                                    <p className="text-sm text-secondary font-medium mt-1">{property?.DataUnitTotalPriceFrom ? Utils.formatCurrency(property.DataUnitTotalPriceFrom, isArabic ? 'ar-EG' : 'en-US') : t('priceOnRequest')}</p>
+                                                </div>
+                                                <button onClick={() => onToggleFavorite(item.CompoundId)} className="p-1 rounded-full text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 flex-shrink-0" aria-label={t('removeFromFavorites')}><Icons.HeartSolid className="w-5 h-5" /></button>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            ) : <p className="text-center text-light-textSecondary dark:text-dark-textSecondary py-10">{t('noSavedProperties')}</p>}
+                        </div>
+                    </aside>
+                </>
+            );
+        };
+
+        const Footer = () => {
+            const { t } = useLanguage();
+            const currentYear = new Date().getFullYear();
+            return <footer className="gradient-bg text-white p-6 text-center mt-12"><p className="text-sm">{t('footerText', { year: currentYear })}</p></footer>;
+        };
+
+        const placeholderCompareImage = "https://via.placeholder.com/200x150.png?text=No+Image";
+        const CompareModal = ({ compareIds, data, onRemoveCompare, onClearCompare, onClose, isOpen }) => {
+            const { t, isArabic } = useLanguage();
+            const modalRef = useRef(null);
+            const compareItems = useMemo(() => data.filter(item => compareIds.includes(item.CompoundId)).slice(0, 3), [data, compareIds]);
+
+            useEffect(() => {
+                const handleKeyDown = (e) => { if (e.key === 'Escape') onClose(); };
+                if (isOpen) { window.addEventListener('keydown', handleKeyDown); document.body.style.overflow = 'hidden'; }
+                else { document.body.style.overflow = 'auto'; }
+                return () => { window.removeEventListener('keydown', handleKeyDown); document.body.style.overflow = 'auto'; };
+            }, [isOpen, onClose]);
+
+            const handleBackdropClick = (e) => { if (modalRef.current && !modalRef.current.contains(e.target)) onClose(); };
+
+            if (!isOpen) return null;
+
+            const renderCompareField = (items, fieldKey, labelKey, formatter = (val) => val, unitKey = '') => (
+                <tr className="border-b border-light-border dark:border-dark-border">
+                    <th scope="row" className="py-3 px-4 text-sm font-medium text-light-textSecondary dark:text-dark-textSecondary text-left rtl:text-right sticky left-0 rtl:right-0 bg-light-card dark:bg-dark-card whitespace-nowrap">{t(labelKey)} {unitKey && `(${t(unitKey)})`}</th>
+                    {items.map(item => {
+                        const property = item?.PropertyListings?.[0];
+                        let value = null;
+                        if (property) {
+                            if (fieldKey === 'areaRange') value = `${property.DataBuiltUpAreaFrom || '?'} - ${property.DataBuiltUpAreaTo || '?'}`;
+                            else if (fieldKey === 'priceRange') value = property.DataUnitTotalPriceFrom ? Utils.formatCurrency(property.DataUnitTotalPriceFrom, isArabic ? 'ar-EG' : 'en-US') : t('priceOnRequest');
+                            else value = property[fieldKey];
+                        }
+                        return <td key={item.CompoundId} className="py-3 px-4 text-sm text-light-text dark:text-dark-text text-center">{value !== null && value !== undefined && String(value).trim() !== '' ? formatter(value) : '-'}</td>;
+                    })}
+                    {Array.from({ length: 3 - items.length }).map((_, idx) => <td key={`empty-${idx}`} className="py-3 px-4"></td>)}
+                </tr>
+            );
+
+            return (
+                <div className="fixed inset-0 bg-black/70 modal-backdrop flex justify-center items-center z-50 p-4 animate-fade-in" onClick={handleBackdropClick}>
+                    <div ref={modalRef} className="bg-light-card dark:bg-dark-card text-light-text dark:text-dark-text rounded-2xl shadow-xl max-w-6xl w-full max-h-[90vh] overflow-hidden relative flex flex-col" role="dialog" aria-modal="true" aria-labelledby="compare-title">
+                        <div className="sticky top-0 bg-light-card dark:bg-dark-card z-10 p-5 border-b border-light-border dark:border-dark-border flex justify-between items-center">
+                            <h2 id="compare-title" className="text-xl font-bold text-primary">{t('compareTitle', { count: compareItems.length })}</h2>
+                            <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                                <button onClick={onClearCompare} disabled={compareItems.length === 0} className="flex items-center px-3 py-1.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"><Icons.Trash className="mr-1 rtl:ml-1 rtl:mr-0"/> {t('clearAll')}</button>
+                                <button onClick={onClose} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400" aria-label={t('close')}><Icons.XMark /></button>
+                            </div>
+                        </div>
+                        <div className="flex-grow overflow-auto">
+                            {compareItems.length < 2 ? <div className="p-10 text-center text-light-textSecondary dark:text-dark-textSecondary"><p>{t('compareError')}</p></div> : (
+                                <table className="w-full border-collapse">
+                                    <thead className="sticky top-0 z-[5] bg-light-card dark:bg-dark-card">
+                                        <tr className="border-b border-light-border dark:border-dark-border">
+                                            <th className="py-3 px-4 text-sm font-medium text-light-textSecondary dark:text-dark-textSecondary text-left rtl:text-right sticky left-0 rtl:right-0 bg-light-card dark:bg-dark-card">{t('feature')}</th>
+                                            {compareItems.map(item => <th key={item.CompoundId} className="py-3 px-4 text-center min-w-[200px]">
+                                                <img src={item.MaterialLinks?.Photos?.[0] || placeholderCompareImage} alt={item.CompoundName} className="w-full h-24 object-cover rounded-md mb-2" onError={(e) => { e.target.onerror = null; e.target.src=placeholderCompareImage; }} />
+                                                <p className="text-sm font-semibold truncate" title={item.CompoundName}>{item.CompoundName}</p>
+                                                <button onClick={() => onRemoveCompare(item.CompoundId)} className="mt-1 text-xs text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 flex items-center mx-auto"><Icons.Trash className="mr-1 rtl:ml-1 rtl:mr-0"/> {t('remove')}</button>
+                                            </th>)}
+                                            {Array.from({ length: 3 - compareItems.length }).map((_, idx) => <th key={`empty-head-${idx}`} className="py-3 px-4 min-w-[200px]"></th>)}
+                                        </tr>
+                                    </thead>
+                                     <tbody className="divide-y divide-light-border dark:divide-dark-border">
+                                         {renderCompareField(compareItems, 'priceRange', 'priceShort')}
+                                         {renderCompareField(compareItems, 'areaRange', 'areaShort', (v) => v, 'sqm')}
+                                         {renderCompareField(compareItems, 'DataCity', 'city', (v) => t(v))}
+                                         {renderCompareField(compareItems, 'DataDeveloper', 'developer', (v) => t(v))}
+                                         {renderCompareField(compareItems, 'PropertyType', 'propertyType', (v) => t(v))}
+                                         {renderCompareField(compareItems, 'DataBedRooms', 'bedroomsShort')}
+                                         {renderCompareField(compareItems, 'DataDeliveryFrom', 'deliveryShort', (v) => v, 'years')}
+                                         {renderCompareField(compareItems, 'DataStatus_Readable', 'status', (v) => t(v))}
+                                         {renderCompareField(compareItems, 'DataFinishing', 'finishing', (v) => t(v))}
+                                     </tbody>
+                                </table>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+
+        // --- Main App Component ---
+        const App = () => {
+            const { isDarkMode } = useTheme(); // Get theme state from context
+            const { t } = useLanguage(); // Get translation function
+
+            const initialFilterState = useMemo(() => ({ // Use memo for initial state based on context potentially
+                searchTerm: '', priceMin: 0, priceMax: Infinity, bedrooms: 'All',
+                propertyTypes: [], cities: [], developers: [], finishing: [], status: [],
+                delivery: 'All', areaMin: 0, areaMax: Infinity,
+            }), []); // Empty dependency array, initial state doesn't change
+
+            const { data: fullData, isLoading, error } = useFetchData('./data.json');
+            const [filters, updateFilters, resetFilters] = useFilterParams(initialFilterState);
+            const [sortField, setSortField] = useState('CompoundName');
+            const [sortOrder, setSortOrder] = useState('asc');
+            const [currentPage, setCurrentPage] = useState(1);
+            const [itemsPerPage, setItemsPerPage] = useState(9);
+            const [favorites, setFavorites] = useLocalStorage('favorites', []);
+            const [compareList, setCompareList] = useLocalStorage('compareList', []);
+            const [visibleSaved, setVisibleSaved] = useState(false);
+            const [visibleCompare, setVisibleCompare] = useState(false);
+            const [toast, setToast] = useState(null); // { message: '', type: '', id: Date.now() }
+
+             // --- Filtering & Sorting ---
+            const filteredData = useMemo(() => {
+                if (!fullData) return [];
+                let data = [...fullData];
+
+                // Search
+                if (filters.searchTerm) {
+                    const term = filters.searchTerm.toLowerCase();
+                    data = data.filter(item => {
+                        const p = item.PropertyListings?.[0];
+                        return item.CompoundName?.toLowerCase().includes(term) || p?.DataCity?.toLowerCase().includes(term) || p?.DataDeveloper?.toLowerCase().includes(term);
+                    });
+                }
+
+                // Filters
+                data = data.filter(item => {
+                    const p = item.PropertyListings?.[0];
+                    if (!p) return false;
+                    const checkMulti = (fVals, pVal) => fVals.length === 0 || (pVal && fVals.includes(pVal));
+
+                    if (!(p.DataUnitTotalPriceFrom >= filters.priceMin && p.DataUnitTotalPriceFrom <= filters.priceMax)) return false;
+                    if (filters.bedrooms !== 'All' && !(filters.bedrooms === '5+' ? parseInt(p.DataBedRooms || 0) >= 5 : String(p.DataBedRooms || '') === filters.bedrooms)) return false;
+                    if (!checkMulti(filters.propertyTypes, p.PropertyType)) return false;
+                    if (!checkMulti(filters.cities, p.DataCity)) return false;
+                    if (!checkMulti(filters.developers, p.DataDeveloper)) return false;
+                    if (!checkMulti(filters.finishing, p.DataFinishing)) return false;
+                    if (!checkMulti(filters.status, p.DataStatus_Readable)) return false;
+                    if (filters.delivery !== 'All' && !(filters.delivery === '3+' ? p.DataDeliveryFrom >= 3 : p.DataDeliveryFrom === parseInt(filters.delivery))) return false;
+                    if (!(p.DataBuiltUpAreaFrom >= filters.areaMin && p.DataBuiltUpAreaFrom <= filters.areaMax)) return false;
+
+                    return true;
+                });
+
+                // Sorting
+                return data.sort((a, b) => {
+                    const pA = a.PropertyListings?.[0]; const pB = b.PropertyListings?.[0];
+                    let fA, fB;
+                    switch (sortField) {
+                        case 'DataUnitTotalPriceFrom': fA = pA?.DataUnitTotalPriceFrom || 0; fB = pB?.DataUnitTotalPriceFrom || 0; break;
+                        case 'DataBedRooms': fA = parseInt(pA?.DataBedRooms || 0); fB = parseInt(pB?.DataBedRooms || 0); break;
+                        default: fA = a.CompoundName?.toLowerCase() || ''; fB = b.CompoundName?.toLowerCase() || '';
+                    }
+                    if (fA < fB) return sortOrder === 'asc' ? -1 : 1;
+                    if (fA > fB) return sortOrder === 'asc' ? 1 : -1;
+                    return 0;
+                });
+            }, [fullData, filters, sortField, sortOrder]);
+
+            const totalItems = filteredData.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const displayedData = useMemo(() => filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage), [filteredData, currentPage, itemsPerPage]);
+
+            // Reset page if it becomes invalid
+            useEffect(() => {
+                if (currentPage > totalPages && totalPages > 0) setCurrentPage(1);
+                else if (totalPages === 0 && currentPage > 1) setCurrentPage(1);
+            }, [currentPage, totalPages]);
+
+            // --- Handlers ---
+            const handleSearchChange = useCallback((term) => { updateFilters({ searchTerm: term }); setCurrentPage(1); }, [updateFilters]);
+            const handleResetFilters = useCallback(() => { resetFilters(); setSortField('CompoundName'); setSortOrder('asc'); setCurrentPage(1); }, [resetFilters]);
+            const showToast = useCallback((messageKey, type = 'info') => setToast({ message: t(messageKey), type: type, id: Date.now() }), [t]);
+            const toggleFavorite = useCallback((id) => setFavorites(p => p.includes(id) ? (showToast('removedFromFavorites', 'warning'), p.filter(i => i !== id)) : (showToast('addedToFavorites', 'success'), [...p, id])), [setFavorites, showToast]);
+            const toggleCompare = useCallback((id) => setCompareList(p => p.includes(id) ? (showToast('removedFromCompare', 'warning'), p.filter(i => i !== id)) : p.length >= 3 ? (showToast('compareLimit', 'error'), p) : (showToast('addedToCompare', 'success'), [...p, id])), [setCompareList, showToast]);
+            const handleRemoveCompare = useCallback((id) => { setCompareList(p => p.filter(i => i !== id)); showToast('removedFromCompare', 'warning'); }, [setCompareList, showToast]);
+            const handleClearCompare = useCallback(() => { setCompareList([]); showToast('clearedCompareList', 'info'); }, [setCompareList, showToast]);
+
+
+            if (isLoading) return <div className="flex justify-center items-center h-screen"><Spinner size="large" /></div>;
+            if (error) return (
+                <div className="flex flex-col justify-center items-center h-screen text-red-500 bg-light-bg dark:bg-dark-bg p-4 text-center">
+                     <Icons.ErrorIcon />
+                     <h2 className="text-xl font-semibold mb-2">{t('errorLoadingTitle')}</h2>
+                     <p className="text-sm mb-4">{t('errorLoadingMessage')}</p>
+                     <pre className="text-xs bg-red-100 dark:bg-red-900/30 p-2 rounded border border-red-300 dark:border-red-700 max-w-full overflow-auto">{error}</pre>
+                     <button onClick={() => window.location.reload()} className="mt-6 px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700">{t('retry')}</button>
+                </div>
+            );
+
+            return (
+                <div className={`min-h-screen flex flex-col ${isDarkMode ? 'dark' : ''} bg-light-bg dark:bg-dark-bg`}> {/* Apply background here */}
+                    <Header savedCount={favorites.length} compareCount={compareList.length} onToggleSaved={() => setVisibleSaved(v => !v)} onToggleCompare={() => setVisibleCompare(true)} />
+                    <main className="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+                        <SearchBar initialSearchTerm={filters.searchTerm} onSearchChange={handleSearchChange} data={fullData} />
+                        <FilterBar filters={filters} updateFilters={updateFilters} resetFilters={handleResetFilters} data={fullData} />
+                        <div className="mb-6 flex flex-wrap items-center justify-end gap-x-4 gap-y-2 text-sm">
+                            <label htmlFor="sortFieldSelect" className="text-light-textSecondary dark:text-dark-textSecondary">{t('sortBy')}</label>
+                            <select id="sortFieldSelect" value={sortField} onChange={e => setSortField(e.target.value)} className="p-2 border border-light-border dark:border-dark-border rounded-md focus:outline-none focus:ring-1 focus:ring-primary bg-light-card dark:bg-dark-card text-light-text dark:text-dark-text !w-auto"> {/* !w-auto added */}
+                                <option value="CompoundName">{t('name')}</option>
+                                <option value="DataUnitTotalPriceFrom">{t('price')}</option>
+                                <option value="DataBedRooms">{t('bedrooms')}</option>
+                            </select>
+                            <button onClick={() => setSortOrder(o => o === 'asc' ? 'desc' : 'asc')} className="p-2 border border-light-border dark:border-dark-border rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-1 focus:ring-primary bg-light-card dark:bg-dark-card text-light-text dark:text-dark-text flex items-center" aria-label={`Sort order: ${t(sortOrder === 'asc' ? 'sortAsc' : 'sortDesc')}`}>
+                                {t(sortOrder === 'asc' ? 'sortAsc' : 'sortDesc')}
+                                {sortOrder === 'asc' ? <Icons.SortAsc className="ml-1 rtl:mr-1 rtl:ml-0" /> : <Icons.SortDesc className="ml-1 rtl:mr-1 rtl:ml-0" />}
+                            </button>
+                        </div>
+                        <DataDisplay data={displayedData} favorites={favorites} compareList={compareList} toggleFavorite={toggleFavorite} toggleCompare={toggleCompare} />
+                        <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalItems={totalItems} itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} />
+                    </main>
+                    <Footer />
+                    <SavedPropertiesSidebar savedPropertyIds={favorites} data={fullData} onToggleFavorite={toggleFavorite} onClose={() => setVisibleSaved(false)} isOpen={visibleSaved} />
+                    <CompareModal compareIds={compareList} data={fullData} onRemoveCompare={handleRemoveCompare} onClearCompare={handleClearCompare} onClose={() => setVisibleCompare(false)} isOpen={visibleCompare} />
+                    {toast && <Toast key={toast.id} message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+                </div>
+            );
+        };
+
+        // Wrap App with providers and render
+        const ProvidedApp = () => (
+            <ThemeProvider>
+                <LanguageProvider>
+                    <App />
+                </LanguageProvider>
+            </ThemeProvider>
+        );
+
+        ReactDOM.render(<ProvidedApp />, document.getElementById('root'));
+
+    </script>
+</body>
+</html>
